@@ -12,4 +12,5 @@ export default () => ({
     POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD || "",
     POSTGRES_DB: process.env.POSTGRES_DB || "",
     MEZON_TOKEN: process.env.MEZON_TOKEN || "",
+    MEZON_BOT_ID: process.env.MEZON_BOT_ID || "",
 });
