@@ -19,7 +19,6 @@ import {
     VoiceJoinedEvent,
     VoiceLeavedEvent
 } from 'mezon-sdk';
-import { RoleAssignedEvent } from 'mezon-sdk/dist/cjs/rtapi/realtime';
 
 @Injectable()
 export class BotGateway {
@@ -73,10 +72,6 @@ export class BotGateway {
             this.eventEmitter.emit(Events.RoleEvent, data);
         });
 
-        this.client.onRoleAssign((data) => {
-            this.eventEmitter.emit(Events.RoleAssign, data);
-        });
-
         this.client.onUserChannelAdded((user: UserChannelAddedEvent) => {
             this.eventEmitter.emit(Events.UserChannelAdded, user);
         });
@@ -99,10 +94,6 @@ export class BotGateway {
 
         this.client.onAddClanUser((data: AddClanUserEvent) => {
             this.eventEmitter.emit(Events.AddClanUser, data);
-        });
-
-        this.client.onRoleAssign((data: RoleAssignedEvent) => {
-            this.eventEmitter.emit(Events.RoleAssign, data);
         });
 
         this.client.onVoiceJoinedEvent((data: VoiceJoinedEvent) => {

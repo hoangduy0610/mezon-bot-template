@@ -1,4 +1,4 @@
-import { APP_CONSTANTS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@app/common/constants';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@app/common/constants';
 import { ReactMessageChannel, ReplyMezonMessage } from '@app/dtos/MezonReplyMessageDto';
 import { MezonClientConfig } from '@app/types/mezon.types';
 import { Injectable, Logger } from '@nestjs/common';
@@ -11,7 +11,10 @@ export class MezonClientService {
     public token: string;
 
     constructor(clientConfigs: MezonClientConfig) {
-        this.client = new MezonClient(clientConfigs.token);
+        this.client = new MezonClient({
+            token: clientConfigs.token,
+            botId: clientConfigs.botId,
+        });
     }
 
     getToken(): string {
@@ -65,8 +68,7 @@ export class MezonClientService {
     }
 
     async sendMessageToUser(message: ReplyMezonMessage): Promise<any> {
-        const dmClan = await this.client.clans.fetch(APP_CONSTANTS.MEZON.DM_CLAN_ID);
-        const user = await dmClan.users.fetch(message.userId);
+        const user = await this.client.users.fetch(message.userId);
 
         if (!user) return;
         try {
@@ -80,15 +82,6 @@ export class MezonClientService {
         } catch (error) {
             this.logger.error('Error sending message to user', error);
             throw error;
-        }
-    }
-
-    async createDMchannel(userId: string): Promise<any> {
-        try {
-            return await this.client.createDMchannel(userId);
-        } catch (error) {
-            this.logger.error('Error creating DM channel', error);
-            return null;
         }
     }
 
